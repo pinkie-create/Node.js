@@ -1,0 +1,22 @@
+{
+  "name": "gb-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pinkie-create/Node.js"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "https://github.com/pinkie-create",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0"
+  }
+}
