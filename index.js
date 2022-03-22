@@ -16,24 +16,13 @@
 
 let data = process.argv.slice(2); //"March 21, 2022 11:30:00"
 const EventEmitter = require('events');
-
-class MyEmitter extends EventEmitter {};
-const emitterObject = new MyEmitter();
+const emitterObject = new EventEmitter();
 
 let d = null
 let h = null
 let m = null
 let s = null
 let diff = null
-
-class Handler {
-  static timer(d, h, m, s) {
-    console.log(`${d} days, ${h} hours, ${m} mins, ${s} secs`)
-  }
-  static timerEnd() {
-    console.log('Время вышло')
-  }
-}
 
 const updateTimer = () => {
   const future = +Date.parse(data);
@@ -49,17 +38,26 @@ const updateTimer = () => {
   h = hours - days * 24;
   m = mins - hours * 60;
   s = secs - mins * 60;
+
+  if (diff <= 0) {
+    emitterObject.emit('timerEnd');
+  } else {
+    console.clear();
+    console.log(`${d} days, ${h} hours, ${m} mins, ${s} secs`)
+  }
 }
 
+const timer = setInterval(() => {
+  emitterObject.emit('timer', d, h, m, s)
+}, 1000)
 
-const run = async () => {
-  const time = await updateTimer()
-  emitterObject.emit('timer', d, h, m, s);
-  if (diff <= 0) {
-    emitterObject.removeListener('timer', Handler.timerEnd);
-  }
-  run();
+const clearTimer = (timer) => {
+  console.log('Время вышло')
+  clearInterval(timer);
+
 };
-run();
 
-emitterObject.on('timer', Handler.timer);
+emitterObject.on('timer', updateTimer);
+emitterObject.on('timerEnd', () => {
+  clearTimer(timer);
+});
